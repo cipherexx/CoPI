@@ -1,5 +1,5 @@
 secrets/
-ps_analytics.json
+*.json
 .env
 xrayenv
 __pycache__
