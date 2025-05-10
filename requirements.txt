@@ -6,3 +6,4 @@ twikit
 selenium
 bs4
 webdriver-manager
+googlesearch-python

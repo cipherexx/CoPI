@@ -7,6 +7,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
+from googlesearch import search
 
 def scrape_mouthshut(base_url, num_pages, output_json_path="mouthshut.json"):
     """
@@ -72,9 +73,14 @@ def scrape_mouthshut(base_url, num_pages, output_json_path="mouthshut.json"):
     
     print(f"Successfully saved {len(indexed_reviews)} reviews to {output_json_path}")
 
-# Example usage:
-# scrape_mouthshut(
-#     base_url="https://www.mouthshut.com/websites/swiggy-reviews-925740914",
-#     num_pages=2,
-#     output_json_path="reviews.json"
-# )
+def get_mouthshut_url(company_name, num_results=5):
+    query = f'site:mouthshut.com "{company_name}"'
+    for result in search(query, num_results=num_results):
+        if "mouthshut.com" in result:
+            return result
+    return None
+
+# #Example Usage
+# from mouthshut_scraper import scrape_mouthshut, get_mouthshut_url
+# scrape_mouthshut(get_mouthshut_url("blinkit"), 2)
+

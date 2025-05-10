@@ -17,5 +17,5 @@
 # from twikit_fetcher import fetch_tweets
 # asyncio.run(fetch_tweets("swiggy"))
 
-from mouthshut_scraper import scrape_mouthshut
-scrape_mouthshut("https://www.mouthshut.com/websites/swiggy-reviews-925740914", 2)
+from mouthshut_scraper import scrape_mouthshut, get_mouthshut_url
+scrape_mouthshut(get_mouthshut_url("blinkit"), 2)
