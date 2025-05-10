@@ -17,8 +17,14 @@
 # from twikit_fetcher import fetch_tweets
 # asyncio.run(fetch_tweets("swiggy"))
 
-from mouthshut_scraper import scrape_mouthshut, get_mouthshut_url
-scrape_mouthshut(get_mouthshut_url("blinkit"), 2)
+# from mouthshut_scraper import scrape_mouthshut, get_mouthshut_url
+# scrape_mouthshut(get_mouthshut_url("blinkit"), 2)
 
 # from yfinance_fetcher import get_nse_ticker, get_bse_ticker
 # print(get_bse_ticker("swiggy"))
+
+# from kanoon_scraper import scrape_indiankanoon
+# scrape_indiankanoon(
+#     company_name="swiggy",
+#     max_pages=2,
+# )
