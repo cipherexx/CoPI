@@ -1,0 +1,5 @@
+secrets/
+ps_analytics.json
+.env
+xrayenv
+__pycache__
