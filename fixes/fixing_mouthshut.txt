@@ -1,0 +1,27 @@
+Current mouthshut scraper relies on locally installed google chrome for scraping purposes
+For this implementation, if you run into issues while scraping from mouthshut run the following on bash
+This is simply to ensure you have google chrome and the required libraries to run it on your pc
+
+
+
+#1. 
+sudo apt-get update
+sudo apt-get install -y \
+  libnss3 \
+  libglib2.0-0 \
+  libx11-6 \
+  libatk-bridge2.0-0 \
+  libatk1.0-0 \
+  libcups2 \
+  libdrm2 \
+  libgbm1 \
+  libnspr4 \
+  libnss3
+#2. 
+# Add the Google Chrome repository
+wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+
+# Install Chrome
+sudo apt-get update
+sudo apt-get install google-chrome-stable

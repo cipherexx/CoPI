@@ -3,3 +3,6 @@ requests
 gnews
 yfinance
 twikit
+selenium
+bs4
+webdriver-manager
