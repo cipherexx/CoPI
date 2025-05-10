@@ -24,7 +24,7 @@ def get_stock_data(ticker):
         print(f"Downloaded data for {ticker}: {data.shape}")
         print(f"Columns after flattening: {data.columns}")
 
-        # Ensure we're working with Series for indicators (1D array)
+        # Ensure i'm working with Series for indicators (1D array)
         close_prices = data['Close']
         high_prices = data['High']
         low_prices = data['Low']

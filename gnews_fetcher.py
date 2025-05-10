@@ -14,11 +14,5 @@ def getGNews(topic, output_json_path="news.json"):
         json.dump(response, f, indent=2)
 
 
-'''
-TODO:
--->filter responses based on dates to only pick
-recent responses
--->explore other functions from gnews for potentially
-faster access
-'''
+
 
