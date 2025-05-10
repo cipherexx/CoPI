@@ -3,6 +3,9 @@ import pandas as pd
 import json
 from ta.momentum import RSIIndicator
 from ta.trend import MACD
+from bs4 import BeautifulSoup
+import requests
+from duckduckgo_search import DDGS
 
 # Function to calculate VWAP manually
 def calculate_vwap(data):
@@ -84,3 +87,83 @@ def build_perception_json(nse_ticker=None, bse_ticker=None, output_json_path="yf
 
     with open(output_json_path, "w") as f:
         json.dump(result, f, indent=2)
+
+# def get_nse_ticker(company_name):
+#     query=f'site:screener.in "{company_name}"'
+#     target_url=None
+#     for result in search(query, num_results=1):
+#         if "screener.in" in result:
+#             target_url = result
+#     if not target_url:
+#         return None
+#     headers = {
+#         "User-Agent": "Mozilla/5.0"
+#     }
+#     response = requests.get(target_url, headers=headers)
+#     if response.status_code != 200:
+#         return None
+#     soup = BeautifulSoup(response.text, 'html.parser')
+#     element = soup.select_one("a~ a+ a .upper")
+#     if element:
+#         tmp_text=element.get_text(strip=True)
+#         return tmp_text[4:].strip()
+#     else:
+#         return None
+def get_nse_ticker(company_name):
+    query = f'site:screener.in "{company_name}"'
+    target_url = None
+
+    # Use DuckDuckGo search to get the first result
+    results = DDGS().text(query, max_results=1)
+    if results:
+        # DuckDuckGo returns a list of dicts with 'href' as the URL
+        first_result = results[0]
+        if "screener.in" in first_result.get("href", ""):
+            target_url = first_result["href"]
+
+    if not target_url:
+        return None
+
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+    response = requests.get(target_url, headers=headers)
+    if response.status_code != 200:
+        return None
+    soup = BeautifulSoup(response.text, 'html.parser')
+    element = soup.select_one("a~ a+ a .upper")
+    if element:
+        tmp_text = element.get_text(strip=True)
+        return tmp_text[4:].strip()
+    else:
+        return None
+
+def get_bse_ticker(company_name):
+    query = f'site:screener.in "{company_name}"'
+    target_url = None
+
+    # Use DuckDuckGo search to get the first result
+    results = DDGS().text(query, max_results=1)
+    if results:
+        # DuckDuckGo returns a list of dicts with 'href' as the URL
+        first_result = results[0]
+        if "screener.in" in first_result.get("href", ""):
+            target_url = first_result["href"]
+
+    if not target_url:
+        return None
+
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+    response = requests.get(target_url, headers=headers)
+    if response.status_code != 200:
+        return None
+    soup = BeautifulSoup(response.text, 'html.parser')
+    element = soup.select_one("a:nth-child(2) .ink-700")
+    if element:
+        tmp_text = element.get_text(strip=True)
+        return tmp_text[4:].strip()
+    else:
+        return None
+

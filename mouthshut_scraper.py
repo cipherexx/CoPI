@@ -7,7 +7,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
-from googlesearch import search
+from duckduckgo_search import DDGS
 
 def scrape_mouthshut(base_url, num_pages, output_json_path="mouthshut.json"):
     """
@@ -75,9 +75,11 @@ def scrape_mouthshut(base_url, num_pages, output_json_path="mouthshut.json"):
 
 def get_mouthshut_url(company_name, num_results=5):
     query = f'site:mouthshut.com "{company_name}"'
-    for result in search(query, num_results=num_results):
-        if "mouthshut.com" in result:
-            return result
+    results = DDGS().text(query, max_results=num_results)
+    for result in results:
+        url = result.get("href", "")
+        if "mouthshut.com" in url:
+            return url
     return None
 
 # #Example Usage
