@@ -3,3 +3,4 @@ secrets/
 .env
 xrayenv
 __pycache__
+test*

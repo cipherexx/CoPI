@@ -3,8 +3,8 @@ from gnews import GNews
 
 def getGNews(topic, output_json_path="news.json"):
     '''
-    fetches google news using the gnews package. It can
-    take a good 30-40 seconds and may need to be replaced
+    fetches news using the gnews package. It can take
+    a good 30-40 seconds and may need to be replaced
     by some other package in the near future that does
     a plug and play with news in json
     '''
