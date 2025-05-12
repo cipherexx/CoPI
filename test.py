@@ -1,7 +1,7 @@
-# import pagespeed
-# from pagespeed import fetchPSAnalytics
+import pagespeed
+from pagespeed import fetchPSAnalytics
 
-# fetchPSAnalytics("https://www.cipherexx.github.io")
+fetchPSAnalytics("hdfc bank ltd.")
 
 # from gnews_fetcher import getGNews
 # getGNews(topic="schools")
@@ -28,3 +28,12 @@
 #     company_name="swiggy",
 #     max_pages=2,
 # )
+
+# from ambitionbox_scraper import scrape_ambitionbox_reviews
+# scrape_ambitionbox_reviews(
+#         base_url="https://www.ambitionbox.com/reviews/sugar-cosmetics-reviews",
+#         max_pages=2,
+#     )
+
+# from ambitionbox_scraper import get_ambitionbox_rating
+# get_ambitionbox_rating("swiggy")
