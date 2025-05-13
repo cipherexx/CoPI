@@ -10,3 +10,7 @@ duckduckgo_search
 httpx
 tldextract
 thefuzz
+pandas
+ta
+fastapi
+uvicorn

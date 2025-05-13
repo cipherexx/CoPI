@@ -68,5 +68,5 @@ def fetchPSAnalytics(company_name, output_path="ps_analytics.json", strategy='mo
     homepage = get_company_homepage(company_name)
     if not homepage:
         return
-    fetchPSAnalyticsInternal(homepage, output_path="ps_analytics.json", strategy='mobile')
+    fetchPSAnalyticsInternal(homepage, output_path=output_path, strategy='mobile')
 

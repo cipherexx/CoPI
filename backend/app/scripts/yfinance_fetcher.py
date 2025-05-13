@@ -88,6 +88,11 @@ def build_perception_json(nse_ticker=None, bse_ticker=None, output_json_path="yf
     with open(output_json_path, "w") as f:
         json.dump(result, f, indent=2)
 
+def yfinance_full(company_name, output_path="yf_stats.json"):
+    nse_ticker=get_nse_ticker(company_name)
+    bse_ticker=get_bse_ticker(company_name)
+    build_perception_json(nse_ticker=nse_ticker, bse_ticker=bse_ticker, output_json_path=output_path)
+
 # def get_nse_ticker(company_name):
 #     query=f'site:screener.in "{company_name}"'
 #     target_url=None
@@ -114,7 +119,8 @@ def get_nse_ticker(company_name):
     target_url = None
 
     # Use DuckDuckGo search to get the first result
-    results = DDGS().text(query, max_results=1)
+    ddgs=DDGS(timeout=30)
+    results = ddgs.text(query, max_results=1)
     if results:
         # DuckDuckGo returns a list of dicts with 'href' as the URL
         first_result = results[0]
@@ -125,7 +131,7 @@ def get_nse_ticker(company_name):
         return None
 
     headers = {
-        "User-Agent": "Mozilla/5.0"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
     }
     response = requests.get(target_url, headers=headers)
     if response.status_code != 200:
@@ -143,7 +149,8 @@ def get_bse_ticker(company_name):
     target_url = None
 
     # Use DuckDuckGo search to get the first result
-    results = DDGS().text(query, max_results=1)
+    ddgs=DDGS(timeout=30)
+    results = ddgs.text(query, max_results=1)
     if results:
         # DuckDuckGo returns a list of dicts with 'href' as the URL
         first_result = results[0]
@@ -154,7 +161,7 @@ def get_bse_ticker(company_name):
         return None
 
     headers = {
-        "User-Agent": "Mozilla/5.0"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
     }
     response = requests.get(target_url, headers=headers)
     if response.status_code != 200:
