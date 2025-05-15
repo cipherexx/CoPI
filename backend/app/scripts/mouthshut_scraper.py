@@ -1,4 +1,5 @@
 import json
+import time
 from time import sleep
 from random import randint
 from selenium import webdriver
@@ -7,14 +8,16 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
-from duckduckgo_search import DDGS
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-def scrape_mouthshut(base_url, num_pages, output_json_path="mouthshut.json"):
+def scrape_mouthshut(base_url, num_pages):
     """
     Args:
         base_url (str): Base URL without page number (e.g., 'https://example.com/reviews')
         num_pages (int): Number of pages to scrape
-        output_json_path (str): Path for output JSON file
+
+    Returns:
+        list: List of review texts
     """
     # Configure Chrome options
     chrome_options = Options()
@@ -64,25 +67,47 @@ def scrape_mouthshut(base_url, num_pages, output_json_path="mouthshut.json"):
     finally:
         driver.quit()
 
-    # Index reviews
-    indexed_reviews = [{"index": i+1, "review": review} for i, review in enumerate(reviews_list)]
+    return reviews_list
 
-    # Save results to JSON
-    with open(output_json_path, 'w', encoding='utf-8') as json_file:
-        json.dump(indexed_reviews, json_file, ensure_ascii=False, indent=2)
+def get_mouthshut_url(company_name):
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox")
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+    formatted_name = company_name.strip().replace(" ", "+")
+    search_url = f"https://www.mouthshut.com/search/prodsrch.aspx?data={formatted_name}&type=&p=0"
+    driver.get(search_url)
+    time.sleep(3)
+
+    try:
+        product_link_element = driver.find_element(By.ID, "productRepeater_ctl00_hypProduct")
+        product_url = product_link_element.get_attribute("href")
+        return product_url
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+    finally:
+        driver.quit()
+
+def mouthshut_fetch(company_name, num_pages=3):
+    url = get_mouthshut_url(company_name)
+    if not url:
+        return {"Title": "Mouthshut Review", "Rating": None, "Reviews": []}
     
-    print(f"Successfully saved {len(indexed_reviews)} reviews to {output_json_path}")
+    reviews = scrape_mouthshut(url, num_pages=num_pages)
 
-def get_mouthshut_url(company_name, num_results=5):
-    query = f'site:mouthshut.com "{company_name}"'
-    results = DDGS().text(query, max_results=num_results)
-    for result in results:
-        url = result.get("href", "")
-        if "mouthshut.com" in url:
-            return url
-    return None
+    analyzer = SentimentIntensityAnalyzer()
+    scores = [analyzer.polarity_scores(review)['compound'] for review in reviews]
 
-# #Example Usage
-# from mouthshut_scraper import scrape_mouthshut, get_mouthshut_url
-# scrape_mouthshut(get_mouthshut_url("blinkit"), 2)
+    if scores:
+        avg_score = sum(scores) / len(scores)
+        rating = round((avg_score + 1) * 5, 2) #normalize from [-1,1] to [0,10]
+    else:
+        rating = None
 
+    return {
+        "Title": "Mouthshut Review",
+        "Rating": rating,
+        "Reviews": reviews
+    }
