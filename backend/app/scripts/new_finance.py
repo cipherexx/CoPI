@@ -2,6 +2,8 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 from scipy import stats
+import requests
+from bs4 import BeautifulSoup
 
 def financial_analysis_score(ticker_symbol):
     """
@@ -71,7 +73,8 @@ def financial_analysis_score(ticker_symbol):
             'capitalization_score': capitalization_score,
             'coverage_score': coverage_score,
             'efficiency_score': efficiency_score,
-            'cost_structure_score': cost_structure_score
+            'cost_structure_score': cost_structure_score,
+            'ticker':ticker_symbol
         }
         
     except Exception as e:
@@ -463,8 +466,10 @@ def calculate_cost_structure_score(ticker, income_stmt):
         print(f"Error calculating cost structure score: {str(e)}")
         return None
 
-# Example usage
-def analyze_company(ticker_symbol):
+
+def analyze_company(company_name):
+
+    ticker_symbol=get_ticker(company_name)
     """Analyze a company and print its financial analysis scores"""
     results = financial_analysis_score(ticker_symbol)
     
@@ -496,3 +501,23 @@ def analyze_company(ticker_symbol):
         print(f"Could not analyze {ticker_symbol}")
     
     return results
+
+
+
+
+def get_ticker(company_name):
+    company_name=company_name.replace(" ","+")
+    url=f"https://www.nseindia.com/search?q={company_name}&page=1&type=quotes"
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
+    }
+    item=".searchWrp:nth-child(1) a"
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, 'html.parser')
+        for result in soup.select(item):
+            ticker=result.text.strip()
+    except Exception as e:
+        return None
+    return (ticker+".NS")

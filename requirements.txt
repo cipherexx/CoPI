@@ -1,6 +1,6 @@
 python-dotenv
 requests
-gnews
+pygooglenews
 yfinance
 twikit
 selenium

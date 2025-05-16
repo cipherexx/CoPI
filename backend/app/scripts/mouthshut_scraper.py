@@ -90,7 +90,7 @@ def get_mouthshut_url(company_name):
     finally:
         driver.quit()
 
-def mouthshut_fetch(company_name, num_pages=3):
+def mouthshut_fetch(company_name, num_pages=1):
     url = get_mouthshut_url(company_name)
     if not url:
         return {"Title": "Mouthshut Review", "Rating": None, "Reviews": []}
@@ -103,6 +103,7 @@ def mouthshut_fetch(company_name, num_pages=3):
     if scores:
         avg_score = sum(scores) / len(scores)
         rating = round((avg_score + 1) * 5, 2) #normalize from [-1,1] to [0,10]
+        rating=rating*0.8 #necessary because 20% of the text is companies thanking people
     else:
         rating = None
 

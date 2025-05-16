@@ -37,18 +37,18 @@ def extract_review_count(text):
     except ValueError:
         return None
 
-def get_ambitionbox_rating(company_name, output_json_path="ambitionbox.json"):
-    query = f'site:ambitionbox.com "{company_name}" reviews'
-    results = DDGS().text(query, max_results=1)
-    for result in results:
-        url = result.get("href", "")
-        if "ambitionbox.com" in url:
-            break
+def get_ambitionbox_rating(company_name):
+    url=get_ambition_url(company_name)
     rating,reviewcnt=scrape_rating(url)
     data={
         "rating" : rating,
-        "review count" : reviewcnt
+        "review count" : reviewcnt,
+        "url":url
     }
-    with open(output_json_path, "w") as f:
-        json.dump(data, f)
+    json.dumps(data)
 
+
+
+def get_ambition_url(company_name):
+    base=company_name.replace(" ","-")
+    return f"https://www.ambitionbox.com/reviews/{base}-reviews"
