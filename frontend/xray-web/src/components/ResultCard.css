@@ -1,0 +1,46 @@
+.result-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.score-display {
+  margin: 20px 0;
+}
+
+.score-value {
+  font-size: 48px;
+  font-weight: bold;
+  color: #166088;
+}
+
+.score-label {
+  font-size: 16px;
+  color: #666;
+}
+
+.progress-display {
+  margin-top: 15px;
+}
+
+.progress-bar {
+  height: 12px;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.progress-filled {
+  height: 100%;
+  background-color: #4a6fa5;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 14px;
+  color: #666;
+}

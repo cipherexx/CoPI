@@ -130,7 +130,7 @@ def indiankanoon_metric(company_name):
 def fetch_indiankanoon_final(company_name):
     rating=indiankanoon_metric(company_name)
     company_name=company_name.replace(" ","+")
-    url="https://indiankanoon.org/search/?formInput={company_name}"
+    url=f"https://indiankanoon.org/search/?formInput={company_name}"
     #content=scrape_indiankanoon(company_name,1)
     result={
         "rating" : rating,

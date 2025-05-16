@@ -27,6 +27,7 @@ def scrape_mouthshut(base_url, num_pages):
     chrome_options.add_experimental_option(
         "prefs", {"profile.default_content_setting_values.notifications": 1}
     )
+    chrome_options.page_load_strategy = "eager"
     chrome_options.add_argument("--headless=new")
 
     # Initialize WebDriver with automatic ChromeDriver management
@@ -74,6 +75,7 @@ def get_mouthshut_url(company_name):
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
+    chrome_options.page_load_strategy = "normal"
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     formatted_name = company_name.strip().replace(" ", "+")
     search_url = f"https://www.mouthshut.com/search/prodsrch.aspx?data={formatted_name}&type=&p=0"

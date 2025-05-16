@@ -41,11 +41,11 @@ def get_ambitionbox_rating(company_name):
     url=get_ambition_url(company_name)
     rating,reviewcnt=scrape_rating(url)
     data={
-        "rating" : rating,
+        "rating" : float(rating),
         "review count" : reviewcnt,
         "url":url
     }
-    json.dumps(data)
+    return json.dumps(data)
 
 
 

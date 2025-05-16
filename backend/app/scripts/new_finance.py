@@ -68,7 +68,7 @@ def financial_analysis_score(ticker_symbol):
             overall_score = None
         
         return {
-            'overall_score': overall_score,
+            'rating': overall_score,
             'profitability_score': profitability_score,
             'capitalization_score': capitalization_score,
             'coverage_score': coverage_score,
@@ -477,8 +477,8 @@ def analyze_company(company_name):
         print(f"\nFinancial Analysis for {ticker_symbol}")
         print("=" * 50)
         
-        if results['overall_score'] is not None:
-            print(f"Overall Score: {results['overall_score']:.2f}/10")
+        if results['rating'] is not None:
+            print(f"Rating: {results['rating']:.2f}/10")
         else:
             print("Overall Score: N/A")
             
