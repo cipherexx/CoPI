@@ -1,5 +1,6 @@
 secrets/
 *.json
+!backend/app/vercel.json
 !frontend/package.json
 !frontend/package-lock.json
 !frontend/xray-web/package-lock.json

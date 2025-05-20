@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-from duckduckgo_search import DDGS
 import json
 
 def scrape_rating(url):

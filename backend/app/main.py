@@ -5,6 +5,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 import time
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 # Import the new functions from your updated scripts
 from app.scripts.new_finance import analyze_company
@@ -14,11 +18,12 @@ from app.scripts.kanoon_scraper import fetch_indiankanoon_final
 from app.scripts.ambitionbox_scraper import get_ambitionbox_rating
 from app.scripts.logo_fetcher import retrieve_logo
 
-app = FastAPI(title="Project X-Ray")
+app = FastAPI(title="CoPI by Mihir")
 
+origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origin
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -28,7 +33,7 @@ os.makedirs("output", exist_ok=True)
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to Project X-Ray"}
+    return {"message": "Welcome to CoPI. Are you sure you're supposed to be here? Go Fish!"}
 
 async def generate_company_info(company_name):
     """Generate company information from all sources"""

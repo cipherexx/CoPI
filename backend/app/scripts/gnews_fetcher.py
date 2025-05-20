@@ -67,7 +67,8 @@ def analyze_lm_sentiment(text, positive_words, negative_words):
     return lm_polarity
 
 def fetch_news_rating(company_name):
-    json_string = getNews(company_name)
+    topic=company_name+" company"
+    json_string = getNews(topic)
     script_dir = os.path.dirname(__file__)
     lmd_csv_path = os.path.join(script_dir,'../loughran-mcdonald.csv')
     result = analyze_headlines(json_string, lmd_csv_path)
