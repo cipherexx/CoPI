@@ -1,9 +1,26 @@
+// components/TaskCard.jsx
 import './TaskCard.css';
 
-function TaskCard({ taskName, taskData }) {
+function TaskCard({ taskName, taskData, weight }) {
+  const getTaskRating = () => {
+    if (!taskData || taskData.status !== 'success' || !taskData.data) {
+      return null;
+    }
+    
+    // Find rating property (case-insensitive)
+    const ratingKey = Object.keys(taskData.data).find(
+      k => k.toLowerCase() === 'rating'
+    );
+    
+    return ratingKey ? taskData.data[ratingKey] : null;
+  };
+  
+  const rating = getTaskRating();
+  const ratingPercentage = rating !== null ? (rating / 5) * 100 : 0;
+  
   const renderTaskContent = () => {
     if (!taskData || taskData.status !== 'success' || !taskData.data) {
-      return <p>No data available</p>;
+      return <p className="no-data">No data available</p>;
     }
 
     switch (taskName) {
@@ -18,86 +35,135 @@ function TaskCard({ taskName, taskData }) {
       case 'reviews':
         return renderReviewsData(taskData.data);
       default:
-        return <pre>{JSON.stringify(taskData.data, null, 2)}</pre>;
+        return <pre className="json-data">{JSON.stringify(taskData.data, null, 2)}</pre>;
     }
   };
 
   const renderFinanceData = (data) => {
-    if (!data) return <p>Financial data not available (Rate limited)</p>;
+    if (!data) return <p className="no-data">Financial data not available (Rate limited)</p>;
     return (
       <div className="finance-data">
-        <h3>Financial Data</h3>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <pre className="json-data">{JSON.stringify(data, null, 2)}</pre>
       </div>
     );
   };
 
   const renderNewsData = (data) => {
-    if (!data || !data.articles) return <p>News data not available</p>;
+    if (!data || !data.articles) return <p className="no-data">News data not available</p>;
     return (
       <div className="news-data">
-        <h3>News (Rating: {data.rating.toFixed(2)})</h3>
-        <ul>
-          {data.articles.slice(0, 25).map((article, index) => (
-            <li key={index}>
+        <ul className="news-list">
+          {data.articles.slice(0, 3).map((article, index) => (
+            <li key={index} className="news-item">
               <a href={article.link} target="_blank" rel="noopener noreferrer">
                 {article.title}
               </a>
             </li>
           ))}
         </ul>
-        {data.articles.length > 5 && <p>+ {data.articles.length - 25} more articles</p>}
+        {data.articles.length > 3 && (
+          <p className="more-info">+ {data.articles.length - 3} more articles</p>
+        )}
       </div>
     );
   };
 
   const renderLegalData = (data) => {
-    if (!data) return <p>Legal data not available</p>;
+    if (!data) return <p className="no-data">Legal data not available</p>;
     return (
       <div className="legal-data">
-        <h3>Legal Information</h3>
-        <p>Rating: {data.rating.toFixed(2)}</p>
-        <p><a href={data.url} target="_blank" rel="noopener noreferrer">View Legal Details</a></p>
+        <p className="legal-link">
+          <a href={data.url} target="_blank" rel="noopener noreferrer">
+            View Legal Details
+          </a>
+        </p>
       </div>
     );
   };
 
   const renderAmbitionBoxData = (data) => {
-    if (!data) return <p>AmbitionBox data not available</p>;
+    if (!data) return <p className="no-data">AmbitionBox data not available</p>;
     return (
       <div className="ambitionbox-data">
-        <h3>AmbitionBox Ratings</h3>
-        <p>Rating: {data.rating} (from {data["review count"]} reviews)</p>
-        <p><a href={data.url} target="_blank" rel="noopener noreferrer">View on AmbitionBox</a></p>
+        <div className="review-count">
+          <span className="count-number">{data["review count"]}</span>
+          <span className="count-label">reviews</span>
+        </div>
+        <p className="ambitionbox-link">
+          <a href={data.url} target="_blank" rel="noopener noreferrer">
+            View on AmbitionBox
+          </a>
+        </p>
       </div>
     );
   };
 
   const renderReviewsData = (data) => {
-    if (!data || !data.Reviews) return <p>Review data not available</p>;
+    if (!data || !data.Reviews) return <p className="no-data">Review data not available</p>;
     return (
       <div className="reviews-data">
-        <h3>{data.Title} (Rating: {data.Rating.toFixed(2)})</h3>
+        <h3 className="reviews-title">{data.Title}</h3>
         <div className="reviews-list">
-          {data.Reviews.slice(0, 3).map((review, index) => (
+          {data.Reviews.slice(0, 2).map((review, index) => (
             <div key={index} className="review-item">
-              <p>{review.substring(0, 150)}...</p>
+              <p>{review.substring(0, 120)}...</p>
             </div>
           ))}
         </div>
-        {data.Reviews.length > 3 && <p>+ {data.Reviews.length - 3} more reviews</p>}
+        {data.Reviews.length > 2 && (
+          <p className="more-info">+ {data.Reviews.length - 2} more reviews</p>
+        )}
       </div>
     );
   };
 
   return (
-    <div className="task-card">
-      <h2>{taskName.charAt(0).toUpperCase() + taskName.slice(1)}</h2>
-      <div className="task-status">
-        Status: <span className={`status-${taskData.status}`}>{taskData.status}</span>
-        {taskData.time_taken && <span> (took {taskData.time_taken.toFixed(2)}s)</span>}
+    <div className={`task-card ${taskData?.status || 'loading'}`}>
+      <div className="task-header">
+        <h2 className="task-title">
+          {taskName.charAt(0).toUpperCase() + taskName.slice(1)}
+          <span className="task-weight">{weight}%</span>
+        </h2>
+        <div className="task-status">
+          {taskData?.status === 'success' ? (
+            <span className="status-success">✓</span>
+          ) : taskData?.status === 'error' ? (
+            <span className="status-error">✗</span>
+          ) : (
+            <span className="status-loading"></span>
+          )}
+        </div>
       </div>
+      
+      {rating !== null && (
+        <div className="rating-display">
+          <div className="semicircle-mini">
+            <svg viewBox="0 0 100 50">
+              <path 
+                className="semicircle-bg-mini" 
+                d="M10,45 A35,35 0 0,1 90,45"
+              />
+              <path 
+                className="semicircle-fill-mini" 
+                d="M10,45 A35,35 0 0,1 90,45"
+                style={{ 
+                  strokeDasharray: `${ratingPercentage * 1.25}, 125` 
+                }}
+              />
+              <text x="50" y="40" className="rating-text">
+                {rating.toFixed(2)}
+              </text>
+            </svg>
+          </div>
+        </div>
+      )}
+      
       <div className="task-content">
+        {taskData?.time_taken && (
+          <div className="time-taken">
+            Completed in {taskData.time_taken.toFixed(2)}s
+          </div>
+        )}
         {renderTaskContent()}
       </div>
     </div>

@@ -1,21 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import DataDisplay from './components/DataDisplay';
+import ThemeToggle from './components/ThemeToggle';
+import './theme.css';
 import './App.css';
 
 function App() {
   const [tasks, setTasks] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [theme, setTheme] = useState('dark');
+  
+  useEffect(() => {
+    document.body.className = `theme-${theme}`;
+  }, [theme]);
+  
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
 
   const handleSearch = async (companyName) => {
     setLoading(true);
     setTasks({});
     setError(null);
-
+    
     try {
       const response = await fetch(`http://localhost:8000/api/company/${companyName}`);
-      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -23,39 +33,25 @@ function App() {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = '';
-
-      // Process each chunk from the stream
+      
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
         
-        // Decode the chunk and add to buffer
         buffer += decoder.decode(value, { stream: true });
-        
-        // Split buffer by newlines and process each complete line
         const lines = buffer.split('\n');
-        buffer = lines.pop() || ''; // Last line might be incomplete
+        buffer = lines.pop() || '';
         
         for (const line of lines) {
           if (line.trim()) {
             try {
               const jsonData = JSON.parse(line);
-              
-              // Handle different types of events/tasks
               if (jsonData.event === 'start') {
-                setTasks(prev => ({
-                  ...prev,
-                  tasksCount: jsonData.tasks_count || 5
-                }));
+                setTasks(prev => ({ ...prev, tasksCount: jsonData.tasks_count || 5 }));
               } else if (jsonData.event === 'end') {
-                // End event received, all data has been streamed
                 console.log('Data streaming completed');
               } else if (jsonData.task) {
-                // Update the specific task data
-                setTasks(prev => ({
-                  ...prev,
-                  [jsonData.task]: jsonData
-                }));
+                setTasks(prev => ({ ...prev, [jsonData.task]: jsonData }));
               }
             } catch (e) {
               console.error('Error parsing JSON:', e, line);
@@ -73,9 +69,25 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Project X-Ray</h1>
+      <header className="header">
+        <div className="logo-container">
+          <h1 className="logo">
+            C<span className="gold-letter">o</span>PI
+          </h1>
+          <p className="tagline">Company Perception Index</p>
+        </div>
+        <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+      </header>
+      
       <SearchBar onSearch={handleSearch} loading={loading} />
-      {error && <div className="error-message">{error}</div>}
+      
+      {error && (
+        <div className="error-message">
+          <span className="error-icon">!</span>
+          <span>{error}</span>
+        </div>
+      )}
+      
       <DataDisplay tasks={tasks} />
     </div>
   );
