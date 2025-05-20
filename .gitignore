@@ -15,3 +15,7 @@ references.txt
 info/
 html_cache/
 *.csv
+!backend/app/loughran-mcdonald.csv
+backend/app/scripts/pagespeed.py
+backend/app/scripts/twikit_fetcher.py
+backend/app/scripts/yfinance_fetcher.py
