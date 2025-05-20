@@ -1,6 +1,7 @@
 secrets/
 *.json
 !frontend/package.json
+!frontend/package-lock.json
 .env
 xrayenv
 __pycache__
