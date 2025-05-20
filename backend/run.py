@@ -2,6 +2,7 @@ import uvicorn
 import os
 
 port = os.getenv("PORT", 8000)
+port=int(port)
 
 
 if __name__ == "__main__":
