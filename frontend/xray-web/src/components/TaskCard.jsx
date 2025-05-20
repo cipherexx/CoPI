@@ -35,7 +35,8 @@ function TaskCard({ taskName, taskData, weight }) {
       case 'reviews':
         return renderReviewsData(taskData.data);
       default:
-        return <pre className="json-data">{JSON.stringify(taskData.data, null, 2)}</pre>;
+        // return <pre className="json-data">{JSON.stringify(taskData.data, null, 2)}</pre>;
+        return <></>
     }
   };
 
@@ -53,7 +54,7 @@ function TaskCard({ taskName, taskData, weight }) {
     return (
       <div className="news-data">
         <ul className="news-list">
-          {data.articles.slice(0, 3).map((article, index) => (
+          {data.articles.slice(0, 15).map((article, index) => (
             <li key={index} className="news-item">
               <a href={article.link} target="_blank" rel="noopener noreferrer">
                 {article.title}
@@ -61,8 +62,8 @@ function TaskCard({ taskName, taskData, weight }) {
             </li>
           ))}
         </ul>
-        {data.articles.length > 3 && (
-          <p className="more-info">+ {data.articles.length - 3} more articles</p>
+        {data.articles.length > 15 && (
+          <p className="more-info">+ {data.articles.length - 15} more articles</p>
         )}
       </div>
     );
@@ -104,14 +105,14 @@ function TaskCard({ taskName, taskData, weight }) {
       <div className="reviews-data">
         <h3 className="reviews-title">{data.Title}</h3>
         <div className="reviews-list">
-          {data.Reviews.slice(0, 2).map((review, index) => (
+          {data.Reviews.slice(0, 15).map((review, index) => (
             <div key={index} className="review-item">
               <p>{review.substring(0, 120)}...</p>
             </div>
           ))}
         </div>
-        {data.Reviews.length > 2 && (
-          <p className="more-info">+ {data.Reviews.length - 2} more reviews</p>
+        {data.Reviews.length > 15 && (
+          <p className="more-info">+ {data.Reviews.length - 15} more reviews</p>
         )}
       </div>
     );
@@ -147,7 +148,7 @@ function TaskCard({ taskName, taskData, weight }) {
                 className="semicircle-fill-mini" 
                 d="M10,45 A35,35 0 0,1 90,45"
                 style={{ 
-                  strokeDasharray: `${ratingPercentage * 1.25}, 125` 
+                  strokeDasharray: `${ratingPercentage * 1.25*0.5}, 125` 
                 }}
               />
               <text x="50" y="40" className="rating-text">

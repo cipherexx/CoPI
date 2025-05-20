@@ -31,7 +31,7 @@ function SearchBar({ onSearch, loading }) {
           {loading ? (
             <span className="loader"></span>
           ) : (
-            <span>Analyze</span>
+            <span>Calculate</span>
           )}
         </button>
       </div>

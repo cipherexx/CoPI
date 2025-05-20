@@ -12,6 +12,7 @@ from app.scripts.gnews_fetcher import fetch_news_rating
 from app.scripts.mouthshut_scraper import mouthshut_fetch
 from app.scripts.kanoon_scraper import fetch_indiankanoon_final
 from app.scripts.ambitionbox_scraper import get_ambitionbox_rating
+from app.scripts.logo_fetcher import retrieve_logo
 
 app = FastAPI(title="Project X-Ray")
 
@@ -35,6 +36,11 @@ async def generate_company_info(company_name):
     
     # Define tasks in the specified order
     tasks = [
+        {
+            "name":"logo",
+            "func": retrieve_logo,
+            "args": [company_name]
+        },
         {
             "name": "finance",
             "func": analyze_company,

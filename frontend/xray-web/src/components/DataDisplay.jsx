@@ -1,16 +1,23 @@
-// components/DataDisplay.jsx
 import { useState, useEffect } from 'react';
 import TaskCard from './TaskCard';
 import ResultCard from './ResultCard';
 import './DataDisplay.css';
 
 function DataDisplay({ tasks }) {
+  // Define which tasks should be used for scoring
   const WEIGHTS = {
     finance: 35,
     legal: 10,
     news: 20,
     reviews: 25,
     ambitionbox: 10,
+  };
+  
+  // Extract image URL from the new task (assuming the task name is "image")
+  const getImageUrl = () => {
+    const imageTask = tasks.image;
+    return imageTask && imageTask.status === 'success' && imageTask.data ? 
+      imageTask.data.url || null : null;
   };
   
   const calculateWeightedScore = () => {
@@ -47,20 +54,26 @@ function DataDisplay({ tasks }) {
   };
   
   const { averageScore, breakdown } = calculateWeightedScore();
+  const imageUrl = getImageUrl();
   
-  // Count completed tasks and total tasks
-  const completedTasksCount = Object.values(tasks)
-    .filter(task => task.status === 'success' || task.status === 'error').length;
-  const totalTasksCount = tasks.tasksCount || 5; // Default to 5 if not specified
+  // Count completed metric tasks (excluding the image task)
+  const completedMetricTasks = Object.keys(tasks)
+    .filter(key => Object.keys(WEIGHTS).includes(key) && 
+           (tasks[key].status === 'success' || tasks[key].status === 'error'))
+    .length;
+  
+  // Total number of metric tasks (should be 5)
+  const totalMetricTasks = Object.keys(WEIGHTS).length;
   
   return (
     <div className="data-display">
       {Object.keys(tasks).length > 0 && (
         <ResultCard 
           averageScore={averageScore} 
-          completedTasksCount={completedTasksCount} 
-          totalTasksCount={totalTasksCount}
+          completedTasksCount={completedMetricTasks} 
+          totalTasksCount={totalMetricTasks}
           breakdown={breakdown}
+          imageUrl={imageUrl}
         />
       )}
       

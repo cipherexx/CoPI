@@ -1,7 +1,7 @@
 // components/ResultCard.jsx
 import './ResultCard.css';
 
-function ResultCard({ averageScore, completedTasksCount, totalTasksCount, breakdown }) {
+function ResultCard({ averageScore, completedTasksCount, totalTasksCount, breakdown, imageUrl }) {
   const percentage = (completedTasksCount / totalTasksCount) * 100;
 
   return (
@@ -21,7 +21,7 @@ function ResultCard({ averageScore, completedTasksCount, totalTasksCount, breakd
         </div>
       </div>
       
-      <div className="result-content">
+      <div className="result-content">        
         <div className="main-score">
           <div className="semicircle-container">
             <div className="semicircle">
@@ -34,7 +34,7 @@ function ResultCard({ averageScore, completedTasksCount, totalTasksCount, breakd
                   className="semicircle-fill" 
                   d="M20,90 A70,70 0 0,1 180,90"
                   style={{ 
-                    strokeDasharray: `${(averageScore / 5) * 251}, 251` 
+                    strokeDasharray: `${(averageScore / 10) * 251}, 251` 
                   }}
                 />
                 <text x="100" y="85" className="score-text">
@@ -62,7 +62,7 @@ function ResultCard({ averageScore, completedTasksCount, totalTasksCount, breakd
                     <div 
                       className="breakdown-progress" 
                       style={{ 
-                        width: value !== null ? `${(value / 5) * 100}%` : '0%',
+                        width: value !== null ? `${(value / 10) * 100}%` : '0%',
                         opacity: value !== null ? 1 : 0.3
                       }}
                     ></div>
