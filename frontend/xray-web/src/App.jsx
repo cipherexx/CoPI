@@ -14,6 +14,11 @@ function App() {
   useEffect(() => {
     document.body.className = `theme-${theme}`;
   }, [theme]);
+  useEffect(() => {
+  fetch(import.meta.env.VITE_API_URL + '/')
+    .then(() => console.log('Warm-up request sent to backend'))
+    .catch((err) => console.error('Backend warm-up failed:', err));
+}, []);
   
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
