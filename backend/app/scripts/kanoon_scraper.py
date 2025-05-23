@@ -77,7 +77,7 @@ def indiankanoon_metric(company_name):
     }
     xc_url = f"https://indiankanoon.org/search/?formInput={company_name}%20%20%20doctypes%3A%20judgments%20year%3A%20{current_year}"
     xp_url = f"https://indiankanoon.org/search/?formInput={company_name}%20%20%20doctypes%3A%20judgments%20year%3A%20{current_year-1}"
-    xpp_url= f"https://indiankanoon.org/search/?formInput={company_name}%20%20%20doctypes%3A%20judgments%20year%3A%20{current_year-2}"
+    #xpp_url= f"https://indiankanoon.org/search/?formInput={company_name}%20%20%20doctypes%3A%20judgments%20year%3A%20{current_year-2}"
     hsc1_url=f"https://indiankanoon.org/search/?formInput={company_name}%20%20%20%20%20%20%20doctypes%3A%20highcourts%2Csc+year:{current_year}"
     hsc2_url=f"https://indiankanoon.org/search/?formInput={company_name}%20%20%20%20%20%20%20doctypes%3A%20highcourts%2Csc+year:{current_year-1}"
     try:
@@ -102,16 +102,16 @@ def indiankanoon_metric(company_name):
                 xp=result.text.split("of")[1].strip()
         xp=int(xp)
 
-        response = requests.get(xpp_url, headers=headers)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'html.parser')
-        xpp = None
-        for result in soup.select('#search-form+ div b'):
-            xpp=result.text.split("of")[1].strip()
-        if not xpp:
-            for result in soup.select('.didyoumean + div b'):
-                xpp=result.text.split("of")[1].strip()
-        xpp=int(xpp)
+        # response = requests.get(xpp_url, headers=headers)
+        # response.raise_for_status()
+        # soup = BeautifulSoup(response.text, 'html.parser')
+        # xpp = None
+        # for result in soup.select('#search-form+ div b'):
+        #     xpp=result.text.split("of")[1].strip()
+        # if not xpp:
+        #     for result in soup.select('.didyoumean + div b'):
+        #         xpp=result.text.split("of")[1].strip()
+        # xpp=int(xpp)
 
         # response = requests.get(hsc1_url, headers=headers)
         # response.raise_for_status()
@@ -135,9 +135,9 @@ def indiankanoon_metric(company_name):
         # hsc2=int(hsc2)
         # hsc=hsc1+hsc2
         # HCSCP=clamp((1-(hsc/(xp+xc))), 0.01,10)
-        PYCGR=0.5*(1-clamp(((xc*12/current_month-xpp)/xpp),-1,1))
+        #PYCGR=0.5*(1-clamp(((xc*12/current_month-xpp)/xpp),-1,1))
         YCGR=0.5*(1-clamp(((xc*12/current_month-xp)/xp),-1,1))
-        return 10*YCGR*PYCGR
+        return 10*YCGR
     except requests.exceptions.RequestException as e:
         print(f"Error fetching page : {e}")
 
